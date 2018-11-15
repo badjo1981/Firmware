@@ -28,7 +28,7 @@ install:
         }
     } | select @{n="Installation time";e={$_.Minutes,$_.Seconds -join ":"}}
 
-# Note: using start /wait is important
+# Note: using Start-Process -Wait is important
 # because otherwise the install begins but non-blocking and the result cannot be used just after
 
 build_script:
