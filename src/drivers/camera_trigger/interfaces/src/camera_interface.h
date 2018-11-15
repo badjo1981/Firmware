@@ -6,6 +6,7 @@
 
 #include <parameters/param.h>
 #include <px4_log.h>
+#include <board_config.h>
 
 #define arraySize(a) (sizeof((a))/sizeof(((a)[0])))
 
@@ -74,6 +75,6 @@ protected:
 
 	param_t _p_pin;
 
-	int _pins[6];
+	int _pins[DIRECT_PWM_OUTPUT_CHANNELS];
 
 };

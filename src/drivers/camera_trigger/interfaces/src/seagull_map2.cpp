@@ -102,8 +102,13 @@ void CameraInterfaceSeagull::send_toggle_power(bool enable)
 
 void CameraInterfaceSeagull::info()
 {
+#if defined(DIRECT_PWM_OUTPUT_CHANNELS) && DIRECT_PWM_OUTPUT_CHANNELS <= 6
 	PX4_INFO("PWM trigger mode (Seagull MAP2) , pins enabled : [%d][%d][%d][%d][%d][%d]",
 		 _pins[5], _pins[4], _pins[3], _pins[2], _pins[1], _pins[0]);
+#else
+	PX4_INFO("PWM trigger mode (Seagull MAP2) , pins enabled : [%d][%d][%d][%d][%d][%d][%d][%d]",
+		 _pins[7], _pins[6], _pins[5], _pins[4], _pins[3], _pins[2], _pins[1], _pins[0]);
+#endif
 }
 
 #endif /* ifdef __PX4_NUTTX */
