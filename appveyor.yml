@@ -19,8 +19,14 @@ init:
 - ver
 
 install:
-- ps: if (-not (Test-Path C:\Toolchain.msi)) {Invoke-WebRequest https://s3-us-west-2.amazonaws.com/px4-tools/PX4+Windows+Cygwin+Toolchain/PX4+Windows+Cygwin+Toolchain+0.4.msi -OutFile C:\Toolchain.msi}
-- start /wait msiexec /i C:\Toolchain.msi /quiet /qn /norestart /log C:\install.log
+# if the toolchain wasn't restored from build cache download and install it
+- ps: >-
+    Measure-Command {
+        if (-not (Test-Path C:\PX4)) {
+            Invoke-WebRequest https://s3-us-west-2.amazonaws.com/px4-tools/PX4+Windows+Cygwin+Toolchain/PX4+Windows+Cygwin+Toolchain+0.4.msi -OutFile C:\Toolchain.msi
+            Start-Process -Wait msiexec -ArgumentList '/I C:\Toolchain.msi /quiet /qn /norestart /log C:\install.log'
+        }
+    } | select @{n="Installation time";e={$_.Minutes,$_.Seconds -join ":"}}
 
 # Note: using start /wait is important
 # because otherwise the install begins but non-blocking and the result cannot be used just after
@@ -41,6 +47,7 @@ build_script:
 # because otherwise certain things (like python; import numpy) do not work
 
 cache:
-# cache toolchain installation file to avoid downloading it from AWS S3 each time
-# it's ~496MB < 1GB free limit for build caches
-- C:\Toolchain.msi -> appveyor.yml
+# cache the entire toolchain installation folder to avoid
+# downloading it from AWS S3 and installing the MSI each time
+# it's ~1.8GB > 1GB free limit for build caches
+- C:\PX4 -> appveyor.yml
