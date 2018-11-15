@@ -161,7 +161,7 @@ private:
 
 	bool _in_failsafe = false; /**< true if failsafe was entered within current cycle */
 
-	/** Timeout in us for trajectory data to get considered invalid */
+	/** Timeout in us for trajectory data to get considered invalid  */
 	static constexpr uint64_t TRAJECTORY_STREAM_TIMEOUT_US = 500000;
 	/**< number of tries before switching to a failsafe flight task */
 	static constexpr int NUM_FAILURE_TRIES = 10;
